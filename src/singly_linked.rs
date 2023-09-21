@@ -36,6 +36,12 @@ impl<T> LinkedList<T> {
         self.len
     }
 }
+impl<T> Iterator for LinkedList<T> {
+    type Item = T;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.pop()
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -52,5 +58,19 @@ mod tests {
         assert_eq!(ll.pop(), Some(2));
         assert_eq!(ll.pop(), Some(1));
         assert_eq!(ll.pop(), None);
+    }
+
+    #[test]
+    fn iterator_works() {
+        let mut ll = LinkedList::<i32>::new();
+        ll.push(1);
+        ll.push(2);
+        ll.push(3);
+        let mut n = ll.len() as i32;
+        let mut iter = ll.into_iter();
+        while let Some(i) = iter.next() {
+            assert_eq!(i, n);
+            n -= 1;
+        }
     }
 }
