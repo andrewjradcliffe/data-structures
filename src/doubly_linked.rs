@@ -8,12 +8,14 @@ pub struct Node<T> {
 pub struct LinkedList<T> {
     first: Option<Rc<RefCell<Node<T>>>>,
     last: Option<Rc<RefCell<Node<T>>>>,
+    len: usize,
 }
 impl<T> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             first: None,
             last: None,
+            len: 0,
         }
     }
 
@@ -38,10 +40,12 @@ impl<T> LinkedList<T> {
             }
         }
         self.last = Some(new);
+        self.len += 1;
     }
 
     pub fn pop_back(&mut self) -> Option<T> {
         if !self.last.is_none() {
+            self.len -= 1;
             if Rc::ptr_eq(self.first.as_ref().unwrap(), self.last.as_ref().unwrap()) {
                 let rc = self.first.take().unwrap();
                 self.last = None;
@@ -61,6 +65,10 @@ impl<T> LinkedList<T> {
             None
         }
     }
+
+    pub fn len(&self) -> usize {
+        self.len
+    }
 }
 
 #[cfg(test)]
@@ -73,6 +81,7 @@ mod tests {
         ll.push_back(1);
         ll.push_back(2);
         ll.push_back(3);
+        assert_eq!(ll.len(), 3);
         assert_eq!(ll.pop_back(), Some(3));
         assert_eq!(ll.pop_back(), Some(2));
         assert_eq!(ll.pop_back(), Some(1));
