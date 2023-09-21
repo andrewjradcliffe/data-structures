@@ -32,6 +32,9 @@ impl<T> LinkedList<T> {
             _ => None,
         }
     }
+    pub fn len(&self) -> usize {
+        self.len
+    }
 }
 
 #[cfg(test)]
@@ -44,6 +47,7 @@ mod tests {
         ll.push(1);
         ll.push(2);
         ll.push(3);
+        assert_eq!(ll.len(), 3);
         assert_eq!(ll.pop(), Some(3));
         assert_eq!(ll.pop(), Some(2));
         assert_eq!(ll.pop(), Some(1));
