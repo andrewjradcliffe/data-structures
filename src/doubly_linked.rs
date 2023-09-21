@@ -47,11 +47,13 @@ impl<T> LinkedList<T> {
                 self.last = None;
                 Some(Rc::into_inner(rc).unwrap().into_inner().data)
             } else {
+                // We know that `last` is not none.
                 let rc = self.last.take().unwrap();
-                // rc.borrow_mut().prev.unwrap().next = None;
-                // node.prev.borrow_mut().next = None;
+                // As `last` is not none and is not equal to `first`,
+                // unwrapping `prev` is safe.
+                rc.borrow().prev.as_ref().unwrap().borrow_mut().next = None;
+                // At this point, we know that a single reference remains.
                 let node = Rc::into_inner(rc).unwrap().into_inner();
-                node.prev.as_ref().unwrap().borrow_mut().next = None;
                 self.last = node.prev;
                 Some(node.data)
             }
