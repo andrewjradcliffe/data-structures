@@ -1,4 +1,4 @@
-pub mod doubly_linked;
-pub mod singly_linked;
-
 pub mod binary_tree;
+pub mod doubly_linked;
+pub mod graph;
+pub mod singly_linked;
